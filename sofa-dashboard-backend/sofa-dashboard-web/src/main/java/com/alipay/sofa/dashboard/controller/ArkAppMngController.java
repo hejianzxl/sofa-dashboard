@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.dashboard.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.dashboard.client.model.common.Application;
 import com.alipay.sofa.dashboard.constants.SofaDashboardConstants;
 import com.alipay.sofa.dashboard.impl.ZkHelper;
@@ -97,6 +98,7 @@ public class ArkAppMngController {
         // parse commandMap
         CommandRequest commandRequest = parseCommandRequest(commandMap);
         try {
+            LOGGER.info("ArkAppMngController command " + JSON.toJSONString(commandMap));
             commandPushManager.pushCommand(commandRequest);
         } catch (Exception e) {
             // 异常在上层已经输出到日志了，这里仅作为此次操作的是否发生异常的一个标记
@@ -123,7 +125,9 @@ public class ArkAppMngController {
                                               @RequestParam("version") String version) {
         ResponseEntity<String> result = new ResponseEntity<>();
         try {
-            result.setData(zkHelper.getAppState(appName, ip, pluginName, version));
+            String data = zkHelper.getAppState(appName, ip, pluginName, version);
+            LOGGER.info("=================data " + data);
+            result.setData(data);
         } catch (Exception e) {
             result.setSuccess(false);
             LOGGER.error("Error to getBizState.", e);

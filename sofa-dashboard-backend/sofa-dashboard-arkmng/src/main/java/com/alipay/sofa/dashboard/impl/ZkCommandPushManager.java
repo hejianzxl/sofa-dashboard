@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.dashboard.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.dashboard.constants.SofaDashboardConstants;
 import com.alipay.sofa.dashboard.dao.ArkDao;
 import com.alipay.sofa.dashboard.model.ArkModuleVersionDO;
@@ -76,6 +77,7 @@ public class ZkCommandPushManager implements CommandPushManager {
         } else {
             // 如果是按照IP维度推送，则放在 /ip 节点数据中
             List<String> targetHosts = commandRequest.getTargetHost();
+            LOGGER.info("================ targetHosts" + JSON.toJSONString(targetHosts));
             targetHosts.forEach(targetHost -> {
                 String path = SofaDashboardConstants.SOFA_ARK_ROOT + SofaDashboardConstants.SEPARATOR + commandRequest.getAppName() + SofaDashboardConstants.SEPARATOR + targetHost;
                 ArkOperation data = getData(commandRequest);
@@ -89,9 +91,15 @@ public class ZkCommandPushManager implements CommandPushManager {
                         if (isSyncAppState.compareAndSet(false, true)) {
                             String appPath = SofaDashboardConstants.SOFA_ARK_ROOT + SofaDashboardConstants.SEPARATOR + commandRequest.getAppName();
                             String appOldData = new String(getClient().getData().forPath(appPath));
-                            getClient().setData().forPath(path, convertConfig(data, appOldData).getBytes());
+                            System.out.println("appPath:" + appPath + " appOldData:" + appOldData);
+                            String resutlData = convertConfig(data, appOldData);
+                            System.out.println("resutlData: " + resutlData);
+                            getClient().setData().forPath(path, resutlData.getBytes());
                         } else {
                             String oldData = new String(getClient().getData().forPath(path));
+                            System.out.println("oldData: " + oldData);
+                            String oldResutlData = convertConfig(data, oldData);
+                            System.out.println("oldResutlData: " + oldResutlData);
                             getClient().setData().forPath(path, convertConfig(data, oldData).getBytes());
                         }
                     }

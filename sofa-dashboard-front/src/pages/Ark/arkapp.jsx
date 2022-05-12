@@ -171,9 +171,14 @@ class ArkApp extends React.Component {
               message.info(eventType + '成功');
             } else {
               message.info(eventType + '成功,同步模块状态超时，请尝试手动刷新');
+              // 关闭加载动画
+              this.setState({
+                selectedRowKeys: [],
+                loading: false,
+              });
             }
           });
-        }, 3000);
+        }, 10000);
       } else {
         message.info(eventType + '失败，请联系管理员');
       }

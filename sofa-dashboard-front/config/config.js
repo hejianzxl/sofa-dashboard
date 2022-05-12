@@ -15,7 +15,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://localhost:8099/',
+      target: 'http://sofaweb.stable.tcshuke.com/',
       changeOrigin: true,
     },
   },

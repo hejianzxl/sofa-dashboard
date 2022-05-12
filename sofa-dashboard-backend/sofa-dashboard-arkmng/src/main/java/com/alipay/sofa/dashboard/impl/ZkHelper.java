@@ -143,6 +143,8 @@ public class ZkHelper {
         if (curatorClient.checkExists().forPath(bizPath) != null) {
             String bizAppPath = bizPath + SofaDashboardConstants.SEPARATOR + appName
                                 + SofaDashboardConstants.SEPARATOR + ip;
+
+            LOGGER.info("============== getAppState " + ip + " bizAppPath " + bizAppPath);
             if (curatorClient.checkExists().forPath(bizAppPath) != null) {
                 byte[] bytes = curatorClient.getData().forPath(bizAppPath);
                 String data = new String(bytes);

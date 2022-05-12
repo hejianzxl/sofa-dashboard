@@ -51,6 +51,7 @@ public class ApplicationStartedListener implements ApplicationListener {
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
             String address = environment.getProperty(SofaDashboardConstants.KEY);
+            System.out.println("ApplicationStartedListener address:" + address);
             if (StringUtils.isNotBlank(address)) {
                 RegistryConfig registryConfig = new RegistryConfig();
                 if (address.startsWith(SofaDashboardConstants.ZOOKEEPER_PREFIX)) {
